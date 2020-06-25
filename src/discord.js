@@ -13,9 +13,7 @@ function startDiscord(token, handler) {
     console.log(`Logged in as ${client.user.tag}!`);
   });
 
-  client.on("message", (msg) => {
-    handler(msg);
-  });
+  client.on("message", handler);
 
   client.login(token);
 }
