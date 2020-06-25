@@ -1,4 +1,5 @@
-const Discord, { Message } = require("discord.js");
+const Discord = require('discord.js');
+const Message = Discord.Message;
 
 /**
  * Start a Discord bot
