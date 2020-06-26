@@ -11,6 +11,6 @@ let firebaseConfig = {
   measurementId: "G-BEV88WX08L"
 };
 
-firebase.initializeApp(firebaseConfig)
+let fb = firebase.initializeApp(firebaseConfig)
 
-module.exports = { firebase }
+module.exports = { fb }
