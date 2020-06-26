@@ -41,10 +41,10 @@ async function run() {
   //   .catch(function (error) {
   //     console.log(error);
   //   });
-  // let hi = await randomJoke()
-  // console.log(hi)
+  let hi = await randomJoke()
+  console.log(hi)
 }
 
 run();
 
-module.exports = { getAllJoke, randomJoke() };
+module.exports = { getAllJoke, randomJoke };

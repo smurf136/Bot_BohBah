@@ -4,6 +4,7 @@ const database = require("./database");
 const ResponseJoke = require("./response-joke");
 const FlowTwoResponse = require("./flow2-response")
 const InitialJoke = require("./initial-joke");
+const {randomJoke} = require("./getJoke")
 
 wordcut.init();
 let allFlowTwoKeys = [];
@@ -14,11 +15,14 @@ let preKey = null;
  * Create a joke
  * @param {string} msg
  */
-function createJoke(msg) {
+async function createJoke(msg) {
   setFlowKey();
   if (msg.includes("ขอมุก") || msg.includes("ขอมุข")) {
     // TODO: Flow 3
-    return new InitialJoke();
+    let joke = await randomJoke()
+    console.log(joke)
+    let keyword = wordcut.cut(joke.description).split("|")
+    return new InitialJoke(joke.word, keyword, joke.answer);
   } else if (getAllkeysInMessage(msg).length>0) {
     //Flow 2
     keys = getAllkeysInMessage(msg);
