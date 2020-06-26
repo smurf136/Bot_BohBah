@@ -1,15 +1,17 @@
 class ResponseJoke {
   stage = 0;
-  description = '';
-  keyword = '';
+  description = [];
+  keyword = [];
 
   /**
    * @param {string} description
    * @param {string} keyword 
    */
   constructor(description, keyword) {
-    this.description = description;
-    this.keyword = keyword;
+    let words = description.split(',')
+    let keywords = keyword.split(',')
+    this.description = words;
+    this.keyword = keywords;
   }
 
   /**
@@ -19,13 +21,15 @@ class ResponseJoke {
   next(msg) {
     this.stage++;
     if (this.stage === 1) {
-      return 'ที่มัน' + this.description + 'อะนะ';
+      let randomPosition = parseInt(Math.random()*this.description.length);
+      return 'ที่มัน' + this.description[randomPosition] + 'อะนะ';
     } else {
-      if (msg.includes(this.keyword)) {
-        return 'แฮร่!';
-      } else {
-        return 'เง้อออ';
+      for(let e in this.keyword){
+        if (msg.includes(this.keyword[e])) {
+          return 'แฮร่!';
+        }
       }
+        return 'เง้อออ';
     }
   }
 
