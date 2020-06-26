@@ -1,10 +1,10 @@
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const Message = Discord.Message;
 
 /**
  * Start a Discord bot
  * @param {string} token
- * @param {(msg: Message)=>string} handler 
+ * @param {(msg: Message) => string} handler
  */
 function startDiscord(token, handler) {
   const client = new Discord.Client();
@@ -13,7 +13,12 @@ function startDiscord(token, handler) {
     console.log(`Logged in as ${client.user.tag}!`);
   });
 
-  client.on("message", handler);
+  client.on("message", (msg) => {
+    if (client.user.id == msg.author.id) {
+      return;
+    }
+    handler(msg);
+  });
 
   client.login(token);
 }
