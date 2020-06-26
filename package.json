@@ -19,6 +19,8 @@
   "dependencies": {
     "csv-parser": "^2.3.3",
     "discord.js": "^12.2.0",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "firebase": "^7.15.4",
+    "node": "^14.4.0"
   }
 }
