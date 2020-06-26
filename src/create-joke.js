@@ -12,7 +12,7 @@ function createJoke(msg) {
   } else {
     // TODO: Flow 1, 2
     if (msg.includes("ละมุด")) {
-      const joke = new ResponseJoke("สีม่วงๆ", "มังคุด");
+      const joke = new ResponseJoke("สีม่วงๆ,กลมๆ", "มังคุด,มังกุ๊ด,บ่ะกุ๊ด");
       return joke;
     } else if (msg.includes('ซีเรียส')) {
       const joke = new ResponseJoke('เอาไว้กินตอนเช้า', 'ซีเรียล');
