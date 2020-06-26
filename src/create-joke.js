@@ -18,7 +18,7 @@ function createJoke(msg) {
   if (msg.includes("ขอมุก") || msg.includes("ขอมุข")) {
     // TODO: Flow 3
     return new InitialJoke();
-  } else if (getAllkeysInMessage(msg).length>0) {
+  } else if (getAllkeysInMessage(msg).length > 0) {
     //Flow 2
     keys = getAllkeysInMessage(msg);
     if (preKey != null && keys.includes(preKey)) {
@@ -59,11 +59,12 @@ function createJoke(msg) {
     if (keyword.length < 2) {
       return;
     }
-    const nearestWords = getNearestWords(keyword, 3);
+    const nearestWords = getNearestWords(keyword, 16);
     if (nearestWords.length === 0) {
       return;
     }
     const jokeWord = nearestWords[Math.floor(Math.random() * nearestWords.length)];
+    console.log(keyword + " -> " + jokeWord);
     return new ResponseJoke(database.getWordDescriptions(jokeWord), [jokeWord]);
   }
 }
@@ -109,9 +110,24 @@ function getNearestWords(word, maxSimilarityScore) {
 
 function getSimilarityScore(word1, word2) {
   const editDistance = levenshtein(word1, word2);
-  const lengthSimilarity =
-    word1.length > word2.length ? word1.length / word2.length : word2.length / word1.length;
-  return (1 + editDistance / Math.min(word1.length, word2.length)) * lengthSimilarity;
+  const editDistanceSimilarity = Math.pow(
+    2,
+    1 + editDistance / Math.min(word1.length, word2.length)
+  );
+  const vowelSimilarity = Math.pow(4, levenshtein(getVowels(word1), getVowels(word2))) / 2;
+  const lengthSimilarity = Math.pow(
+    4,
+    word1.length > word2.length ? word1.length / word2.length : word2.length / word1.length
+  );
+  return editDistanceSimilarity + vowelSimilarity + lengthSimilarity;
+}
+
+/**
+ * @param {string} word
+ * @returns {string} string of vowels
+ */
+function getVowels(word) {
+  return word.replace(/[ก-ฮ]/g, "").replace("ั", "ะ");
 }
 
 module.exports = createJoke;
