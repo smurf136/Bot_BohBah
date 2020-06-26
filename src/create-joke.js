@@ -50,7 +50,7 @@ function createJoke(msg) {
       }
     }
   } else {
-    // TODO: Flow 1
+    // Flow 1: Similar Word Joke
     const words = wordcut.cut(msg).split("|");
     if (words.length === 0) {
       return;
@@ -59,7 +59,7 @@ function createJoke(msg) {
     if (keyword.length < 2) {
       return;
     }
-    const nearestWords = getNearestWords(keyword, 16);
+    const nearestWords = getNearestWords(keyword, 20);
     if (nearestWords.length === 0) {
       return;
     }
@@ -111,10 +111,10 @@ function getNearestWords(word, maxSimilarityScore) {
 function getSimilarityScore(word1, word2) {
   const editDistance = levenshtein(word1, word2);
   const editDistanceSimilarity = Math.pow(
-    2,
+    4,
     1 + editDistance / Math.min(word1.length, word2.length)
   );
-  const vowelSimilarity = Math.pow(4, levenshtein(getVowels(word1), getVowels(word2))) / 2;
+  const vowelSimilarity = Math.pow(4, levenshtein(getVowels(word1), getVowels(word2)));
   const lengthSimilarity = Math.pow(
     4,
     word1.length > word2.length ? word1.length / word2.length : word2.length / word1.length
