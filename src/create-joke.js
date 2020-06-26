@@ -2,6 +2,7 @@ const wordcut = require("wordcut");
 const levenshtein = require("levenshtein-edit-distance");
 const database = require("./database");
 const ResponseJoke = require("./response-joke");
+const FlowTwoResponse = require("./flow2-response")
 const InitialJoke = require("./initial-joke");
 
 wordcut.init();
@@ -18,27 +19,35 @@ function createJoke(msg) {
   if (msg.includes("ขอมุก") || msg.includes("ขอมุข")) {
     // TODO: Flow 3
     return new InitialJoke();
-  } else if (getAllkeysInMessage(msg).length > 0) {
+  } else if (getAllkeysInMessage(msg).length>0) {
     //Flow 2
     keys = getAllkeysInMessage(msg);
     if (preKey != null && keys.includes(preKey)) {
-      const joke = new ResponseJoke(["คนสุดท้ายที่อยู่ในเกม"], ["คนสุดท้าย"]);
+      answer = database.getFlowTwoAnswer(preKey);
+      description = database.getFlowTwoDescription(answer)
+      const joke = new FlowTwoResponse(answer,description);
       preKey = null;
       return joke;
     }
     for (let e in keys) {
       let keyGetByValue = Object.keys(keyFlowTwos).find((key) => keyFlowTwos[key] === keys[e]);
       if (keys.includes(keyFlowTwos[keys[e]])) {
-        const joke = new ResponseJoke(["คนสุดท้ายที่อยู่ในเกม"], ["คนสุดท้าย"]);
+        answer = database.getFlowTwoAnswer(keyFlowTwos[keys[e]]);
+        description = database.getFlowTwoDescription(answer)
+        const joke = new FlowTwoResponse(answer,description);
         preKey = null;
         return joke;
       } else if (keys.includes(keyGetByValue)) {
-        const joke = new ResponseJoke(["คนสุดท้ายที่อยู่ในเกม"], ["คนสุดท้าย"]);
+        answer = database.getFlowTwoAnswer(keyGetByValue);
+        description = database.getFlowTwoDescription(answer)
+        const joke = new FlowTwoResponse(answer,description);
         preKey = null;
         return joke;
       }
       if (keyFlowTwos[keys[e]] === 0) {
-        const joke = new ResponseJoke(["หมายถึงชอบเรา"], ["ชอบ"]);
+        answer = database.getFlowTwoAnswer(keys[e]);
+        description = database.getFlowTwoDescription(answer)
+        const joke = new FlowTwoResponse(answer,description);
         return joke;
       }
       if (keyFlowTwos[keys[e]] || keyGetByValue) {
@@ -70,13 +79,8 @@ function createJoke(msg) {
 }
 
 function setFlowKey() {
-  let keyFlowTwo = "คนสุดท้าย+เกม,แข่ง+กีฬา,ชอบ,ไอ+จาม";
-  let keys = keyFlowTwo.split(",");
-  allFlowTwoKeys = keyFlowTwo.split(/[\s,+]+/);
-  for (let e in keys) {
-    let arr = keys[e].split("+");
-    keyFlowTwos[arr[0]] = arr[1] == null ? 0 : arr[1];
-  }
+  allFlowTwoKeys = database.getFlowTwoAllKeys().allKeys;
+  keyFlowTwos = database.getFlowTwoAllKeys().keys;
 }
 
 function getAllkeysInMessage(msg) {
