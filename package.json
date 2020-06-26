@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/smurf136/Bot_BohBah#readme",
   "dependencies": {
+    "csv-parser": "^2.3.3",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0"
   }
