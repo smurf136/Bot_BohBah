@@ -4,14 +4,12 @@ class ResponseJoke {
   keyword = [];
 
   /**
-   * @param {string} description
-   * @param {string} keyword 
+   * @param {string[]} description
+   * @param {string[]} keyword 
    */
   constructor(description, keyword) {
-    let words = description.split(',')
-    let keywords = keyword.split(',')
-    this.description = words;
-    this.keyword = keywords;
+    this.description = description;
+    this.keyword = keyword;
   }
 
   /**
