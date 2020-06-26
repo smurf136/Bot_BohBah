@@ -19,6 +19,8 @@
   "dependencies": {
     "csv-parser": "^2.3.3",
     "discord.js": "^12.2.0",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "levenshtein-edit-distance": "^2.0.5",
+    "wordcut": "^0.9.0"
   }
 }
