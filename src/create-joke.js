@@ -18,7 +18,7 @@ function createJoke(msg) {
   if (msg.includes("ขอมุก") || msg.includes("ขอมุข")) {
     // TODO: Flow 3
     return new InitialJoke();
-  } else if (getAllkeysInMessage(msg) != []) {
+  } else if (getAllkeysInMessage(msg).length>0) {
     //Flow 2
     keys = getAllkeysInMessage(msg);
     if (preKey != null && keys.includes(preKey)) {
