@@ -47,4 +47,4 @@ async function run() {
 
 run();
 
-module.exports = { getAllJoke, randomJoke };
+module.exports = { getAllJoke, randomJoke, randomNum };
