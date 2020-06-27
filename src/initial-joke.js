@@ -1,3 +1,5 @@
+const {failed_list} = require("./failed_list")
+const {randomNum} = require("./getJoke")
 class InitialJoke {
   stage = 0;
   keyword = [];
@@ -36,7 +38,7 @@ class InitialJoke {
         }
       }
       console.log("wrong")
-      return "เง้อออ";
+      return failed_list[randomNum(failed_list.length)];
     }
   }
 
