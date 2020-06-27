@@ -9,7 +9,7 @@ const { randomJoke } = require("./getJoke");
 wordcut.init();
 let allFlowTwoKeys = [];
 let keyFlowTwos = {};
-let preKey = null;
+let preKey = [];
 
 /**
  * Create a joke
@@ -25,40 +25,57 @@ async function createJoke(msg) {
     return new InitialJoke(joke.word, keyword, joke.answer);
   } else if (getAllkeysInMessage(msg).length > 0) {
     //Flow 2
-    const keys = getAllkeysInMessage(msg);
-    if (preKey != null && keys.includes(preKey)) {
-      const answer = database.getFlowTwoAnswer(preKey);
-      const description = database.getFlowTwoDescription(answer);
-      const joke = new FlowTwoResponse(answer, description);
-      preKey = null;
-      return joke;
+    keys = getAllkeysInMessage(msg);
+    if (preKey.length > 0) {
+      for (let e in preKey) {
+        if(keys.includes(preKey[e])) {
+          console.log(keyFlowTwos[preKey])
+          if (keyFlowTwos[preKey] != null) {
+            answer = database.getFlowTwoAnswer(preKey);
+          } else {
+            let key = Object.keys(keyFlowTwos);
+            keyGetByValue = null;
+            for(let e in key){
+              console.log(key[e])
+              if(keyFlowTwos[key[e]]==(preKey)){
+                keyGetByValue = keyFlowTwos[key[e]]
+              }
+            }
+            answer = database.getFlowTwoAnswer(keyGetByValue);
+          }
+          description = database.getFlowTwoDescription(answer)
+          const joke = new FlowTwoResponse(answer, description);
+          preKey = [];
+          return joke;
+        }
+      }
     }
     for (let e in keys) {
-      let keyGetByValue = Object.keys(keyFlowTwos).find((key) => keyFlowTwos[key] === keys[e]);
+      let keyGetByValue = getKeyByValue(keys[e]);
       if (keys.includes(keyFlowTwos[keys[e]])) {
-        const answer = database.getFlowTwoAnswer(keyFlowTwos[keys[e]]);
-        const description = database.getFlowTwoDescription(answer);
+        answer = database.getFlowTwoAnswer([keys[e]]);
+        description = database.getFlowTwoDescription(answer)
         const joke = new FlowTwoResponse(answer, description);
-        preKey = null;
+        preKey = [];
         return joke;
-      } else if (keys.includes(keyGetByValue)) {
-        const answer = database.getFlowTwoAnswer(keyGetByValue);
-        const description = database.getFlowTwoDescription(answer);
+      } else if (keys.includes(keyGetByValue[0])) {
+        answer = database.getFlowTwoAnswer([keys[e]]);
+        description = database.getFlowTwoDescription(answer)
         const joke = new FlowTwoResponse(answer, description);
-        preKey = null;
+        preKey = [];
         return joke;
       }
       if (keyFlowTwos[keys[e]] === 0) {
-        const answer = database.getFlowTwoAnswer(keys[e]);
-        const description = database.getFlowTwoDescription(answer);
+        answer = database.getFlowTwoAnswer(keys[e]);
+        description = database.getFlowTwoDescription(answer)
         const joke = new FlowTwoResponse(answer, description);
         return joke;
       }
-      if (keyFlowTwos[keys[e]] || keyGetByValue) {
-        if (keyGetByValue) {
+      if (keyFlowTwos[keys[e]] || keyGetByValue.length>0) {
+        if (keyGetByValue.length>0) {
           preKey = keyGetByValue;
         } else {
-          preKey = keyFlowTwos[keys[e]];
+          preKey =  [keyFlowTwos[keys[e]]];
         }
       }
     }
@@ -82,6 +99,19 @@ async function createJoke(msg) {
   }
 }
 
+function getKeyByValue(value) {
+  let arr = []
+  let keyFlowTwosAfterFindKey = keyFlowTwos
+  while (Object.keys(keyFlowTwosAfterFindKey).find((key) => keyFlowTwosAfterFindKey[key] === value)) {
+    console.log("inloop")
+    result = Object.keys(keyFlowTwosAfterFindKey).find((key) => keyFlowTwosAfterFindKey[key] === value)
+    arr.push(result);
+    keyFlowTwosAfterFindKey[result] = null;
+  }
+  console.log("key get by val"+arr)
+  return arr;
+}
+
 function setFlowKey() {
   allFlowTwoKeys = database.getFlowTwoAllKeys().allKeys;
   keyFlowTwos = database.getFlowTwoAllKeys().keys;
@@ -90,7 +120,7 @@ function setFlowKey() {
 function getAllkeysInMessage(msg) {
   let getAllkeysInMessage = [];
   for (let e in allFlowTwoKeys) {
-    if (msg.includes(allFlowTwoKeys[e])) {
+    if (msg.includes(allFlowTwoKeys[e])&& !getAllkeysInMessage.includes(msg)) {
       getAllkeysInMessage.push(allFlowTwoKeys[e]);
     }
   }
