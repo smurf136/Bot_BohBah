@@ -1,5 +1,6 @@
-const {failed_list} = require("./failed_list")
 const {randomNum} = require("./getJoke")
+const {failed_list} = require("./failed_list")
+const {tob_joke_list} = require("./tob-joke")
 class InitialJoke {
   stage = 0;
   keyword = [];
@@ -26,7 +27,7 @@ class InitialJoke {
     this.stage++;
     if (this.stage === 1) {
       return this.joke
-    } else {
+    } else if(this.stage === 2){
       if(this.keyword === null) {
         return this.answer
       }
@@ -38,7 +39,10 @@ class InitialJoke {
         }
       }
       console.log("wrong")
+      this.stage = 3
       return failed_list[randomNum(failed_list.length)];
+    }else {
+      return tob_joke_list[randomNum(tob_joke_list.length)]
     }
   }
 
@@ -47,7 +51,7 @@ class InitialJoke {
    */
   isEnded() {
     // TODO
-    return this.stage >= 2;
+    return this.stage >= 3;
   }
 }
 
