@@ -7,9 +7,9 @@ let currentJokes = {};
  * Handle Discord message
  * @param {Message} msg
  */
-function handleMessage(msg) {
+async function handleMessage(msg) {
   if (!currentJokes[msg.author.id]) {
-    currentJokes[msg.author.id] = createJoke(msg.content);
+    currentJokes[msg.author.id] = await createJoke(msg.content);
   }
   if (currentJokes[msg.author.id]) {
     const joke = currentJokes[msg.author.id]
