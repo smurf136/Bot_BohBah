@@ -1,10 +1,10 @@
 const wordcut = require("wordcut");
 const levenshtein = require("levenshtein-edit-distance");
 const database = require("./database");
-const ResponseJoke = require("./response-joke");
-const FlowTwoResponse = require("./flow2-response")
+const SimilarWordJoke = require("./similar-word-joke");
+const FlowTwoResponse = require("./flow2-response");
 const InitialJoke = require("./initial-joke");
-const {randomJoke} = require("./getJoke")
+const { randomJoke } = require("./getJoke");
 
 wordcut.init();
 let allFlowTwoKeys = [];
@@ -19,39 +19,39 @@ async function createJoke(msg) {
   setFlowKey();
   if (msg.includes("ขอมุก") || msg.includes("ขอมุข")) {
     // TODO: Flow 3
-    let joke = await randomJoke()
-    console.log(joke)
-    let keyword = wordcut.cut(joke.description).split("|")
+    let joke = await randomJoke();
+    console.log(joke);
+    let keyword = wordcut.cut(joke.description).split("|");
     return new InitialJoke(joke.word, keyword, joke.answer);
-  } else if (getAllkeysInMessage(msg).length>0) {
+  } else if (getAllkeysInMessage(msg).length > 0) {
     //Flow 2
-    keys = getAllkeysInMessage(msg);
+    const keys = getAllkeysInMessage(msg);
     if (preKey != null && keys.includes(preKey)) {
-      answer = database.getFlowTwoAnswer(preKey);
-      description = database.getFlowTwoDescription(answer)
-      const joke = new FlowTwoResponse(answer,description);
+      const answer = database.getFlowTwoAnswer(preKey);
+      const description = database.getFlowTwoDescription(answer);
+      const joke = new FlowTwoResponse(answer, description);
       preKey = null;
       return joke;
     }
     for (let e in keys) {
       let keyGetByValue = Object.keys(keyFlowTwos).find((key) => keyFlowTwos[key] === keys[e]);
       if (keys.includes(keyFlowTwos[keys[e]])) {
-        answer = database.getFlowTwoAnswer(keyFlowTwos[keys[e]]);
-        description = database.getFlowTwoDescription(answer)
-        const joke = new FlowTwoResponse(answer,description);
+        const answer = database.getFlowTwoAnswer(keyFlowTwos[keys[e]]);
+        const description = database.getFlowTwoDescription(answer);
+        const joke = new FlowTwoResponse(answer, description);
         preKey = null;
         return joke;
       } else if (keys.includes(keyGetByValue)) {
-        answer = database.getFlowTwoAnswer(keyGetByValue);
-        description = database.getFlowTwoDescription(answer)
-        const joke = new FlowTwoResponse(answer,description);
+        const answer = database.getFlowTwoAnswer(keyGetByValue);
+        const description = database.getFlowTwoDescription(answer);
+        const joke = new FlowTwoResponse(answer, description);
         preKey = null;
         return joke;
       }
       if (keyFlowTwos[keys[e]] === 0) {
-        answer = database.getFlowTwoAnswer(keys[e]);
-        description = database.getFlowTwoDescription(answer)
-        const joke = new FlowTwoResponse(answer,description);
+        const answer = database.getFlowTwoAnswer(keys[e]);
+        const description = database.getFlowTwoDescription(answer);
+        const joke = new FlowTwoResponse(answer, description);
         return joke;
       }
       if (keyFlowTwos[keys[e]] || keyGetByValue) {
@@ -78,7 +78,7 @@ async function createJoke(msg) {
     }
     const jokeWord = nearestWords[Math.floor(Math.random() * nearestWords.length)];
     console.log(keyword + " -> " + jokeWord);
-    return new ResponseJoke(database.getWordDescriptions(jokeWord), [jokeWord]);
+    return new SimilarWordJoke(database.getWordDescriptions(jokeWord), [jokeWord]);
   }
 }
 
@@ -135,7 +135,7 @@ function getSimilarityScore(word1, word2) {
  * @returns {string} string of vowels
  */
 function getVowels(word) {
-  return word.replace(/[ก-ฮ]/g, "").replace("ั", "ะ");
+  return word.replace(/[ก-หฮ]/g, "").replace("ั", "ะ");
 }
 
-module.exports = createJoke;
+module.exports = { createJoke };
