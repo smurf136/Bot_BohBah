@@ -1,4 +1,4 @@
-class ResponseJoke {
+class SimilarWordJoke {
   stage = 0;
   description = [];
   keyword = [];
@@ -39,4 +39,4 @@ class ResponseJoke {
   }
 }
 
-module.exports = ResponseJoke;
+module.exports = SimilarWordJoke;

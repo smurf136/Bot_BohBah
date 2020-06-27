@@ -1,4 +1,4 @@
-let firebase = require('firebase');
+let firebase = require("firebase");
 
 let firebaseConfig = {
   apiKey: "AIzaSyDlHErRWFW4c44evIpP97ZNHKUM2S5MeAA",
@@ -11,6 +11,6 @@ let firebaseConfig = {
   measurementId: "G-BEV88WX08L"
 };
 
-let fb = firebase.initializeApp(firebaseConfig)
+let fb = firebase.initializeApp(firebaseConfig);
 
-module.exports = { fb }
+module.exports = { fb };

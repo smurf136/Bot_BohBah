@@ -1,11 +1,11 @@
-let {fb} = require("./firebase.js");
+let { fb } = require("./firebase");
 
 const db = fb.database().ref("/");
 
 function getAllJoke() {
   return new Promise(function (resolve, reject) {
     try {
-      let ref = db
+      let ref = db;
 
       ref.on("value", function (snap) {
         if (typeof snap.val() === "undefined") {
@@ -20,17 +20,19 @@ function getAllJoke() {
   });
 }
 
-async function randomJoke(){
-  let jokeList = await getAllJoke().then(function (snap) {
-    return snap
-  }).catch(function (error) {
-    console.error(error)
-  })
-  return jokeList[randomNum(jokeList.length)]
+async function randomJoke() {
+  let jokeList = await getAllJoke()
+    .then(function (snap) {
+      return snap;
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+  return jokeList[randomNum(jokeList.length)];
 }
 
-function randomNum(val){
-  return Math.floor(Math.random() * val)
+function randomNum(val) {
+  return Math.floor(Math.random() * val);
 }
 
 async function run() {
@@ -41,10 +43,12 @@ async function run() {
   //   .catch(function (error) {
   //     console.log(error);
   //   });
-  let hi = await randomJoke()
-  console.log(hi)
+  let hi = await randomJoke();
+  console.log(hi);
 }
 
-run();
+if (require.main === module) {
+  run();
+}
 
 module.exports = { getAllJoke, randomJoke, randomNum };

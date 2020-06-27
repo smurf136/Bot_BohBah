@@ -1,5 +1,5 @@
 const { Message } = require("discord.js");
-const createJoke = require("./create-joke");
+const { createJoke } = require("./create-joke");
 
 let currentJokes = {};
 
@@ -12,7 +12,7 @@ async function handleMessage(msg) {
     currentJokes[msg.author.id] = await createJoke(msg.content);
   }
   if (currentJokes[msg.author.id]) {
-    const joke = currentJokes[msg.author.id]
+    const joke = currentJokes[msg.author.id];
     msg.reply(joke.next(msg.content));
     if (joke.isEnded()) {
       delete currentJokes[msg.author.id];
