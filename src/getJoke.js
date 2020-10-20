@@ -2,6 +2,21 @@ let { fb } = require("./firebase");
 
 const db = fb.database().ref("/");
 
+function addNormalJoke(answer,description,word) {
+  // Add a new document in collection "cities"
+  db.push({
+    answer : answer,
+    description: description,
+    word: word
+  })
+    .then(function () {
+      console.log("Document successfully written!");
+    })
+    .catch(function (error) {
+      console.error("Error writing document: ", error);
+    });
+}
+
 function getAllJoke() {
   return new Promise(function (resolve, reject) {
     try {
@@ -51,4 +66,4 @@ if (require.main === module) {
   run();
 }
 
-module.exports = { getAllJoke, randomJoke, randomNum };
+module.exports = { getAllJoke, randomJoke, randomNum, addNormalJoke };

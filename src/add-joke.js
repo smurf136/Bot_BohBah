@@ -1,11 +1,18 @@
 const database = require("./database");
+const { addNormalJoke } = require('./getJoke');
 
 /**
  * Add a new joke
  * @param {string} msg
  */
 
+const addJokeFormat = /^-a normalJoke [a-zA-Z]+ [a-zA-Z]+ [a-zA-Z]+/;
+
 function addJoke(msg) {
+  if(addJokeFormat.test(msg)){
+    console.log(msg)
+    return addNormal(msg)
+  }
   return addDialogJoke(msg);
 }
 
@@ -27,6 +34,15 @@ function addDialogJoke(msg){
     return 'Succeed';
   }
   return help(msg);
+}
+
+function addNormal(msg){
+  let splitString = msg.split(" ");
+    let answer = splitString[2];
+    let description = splitString[3];
+    let word = splitString[4];
+    addNormalJoke(answer,description,word);
+    return "add Success";
 }
 
 function help(msg){

@@ -18,26 +18,49 @@ let preKey = [];
 async function createJoke(msg) {
   setFlowKey();
   if (msg.includes("ขอมุก") || msg.includes("ขอมุข")) {
-    // TODO: Flow 3
-    let joke = await randomJoke();
-    console.log(joke);
-    let keyword = wordcut.cut(joke.description).split("|");
-    return new InitialJoke(joke.word, keyword, joke.answer);
+    //Flow 3 : Give some joke
+    return flowThree()
   } else if (getAllkeysInMessage(msg).length > 0) {
-    //Flow 2
-    keys = getAllkeysInMessage(msg);
+    //Flow 2 : Dialog joke
+    return FlowTwo(msg);
+  } else {
+    // Flow 1: Similar Word Joke
+    return flowOne(msg);
+  }
+}
+
+function flowOne(msg){
+  const words = wordcut.cut(msg).split("|");
+    if (words.length === 0) {
+      return;
+    }
+    const keyword = words.sort((a, b) => b.length - a.length)[0];
+    if (keyword.length < 2) {
+      return;
+    }
+    const nearestWords = getNearestWords(keyword, 20);
+    if (nearestWords.length === 0) {
+      return;
+    }
+    const jokeWord = nearestWords[Math.floor(Math.random() * nearestWords.length)];
+    console.log(keyword + " -> " + jokeWord);
+    return new SimilarWordJoke(database.getWordDescriptions(jokeWord), [jokeWord]);
+}
+
+function FlowTwo(msg){
+  keys = getAllkeysInMessage(msg);
     if (preKey.length > 0) {
       for (let e in preKey) {
-        if(keys.includes(preKey[e])) {
+        if (keys.includes(preKey[e])) {
           console.log(keyFlowTwos[preKey])
           if (keyFlowTwos[preKey] != null) {
             answer = database.getFlowTwoAnswer(preKey);
           } else {
             let key = Object.keys(keyFlowTwos);
             keyGetByValue = null;
-            for(let e in key){
+            for (let e in key) {
               console.log(key[e])
-              if(keyFlowTwos[key[e]]==(preKey)){
+              if (keyFlowTwos[key[e]] == (preKey)) {
                 keyGetByValue = keyFlowTwos[key[e]]
               }
             }
@@ -46,6 +69,8 @@ async function createJoke(msg) {
           description = database.getFlowTwoDescription(answer)
           const joke = new FlowTwoResponse(answer, description);
           preKey = [];
+          console.log(answer)
+          console.log(description)
           return joke;
         }
       }
@@ -71,32 +96,21 @@ async function createJoke(msg) {
         const joke = new FlowTwoResponse(answer, description);
         return joke;
       }
-      if (keyFlowTwos[keys[e]] || keyGetByValue.length>0) {
-        if (keyGetByValue.length>0) {
+      if (keyFlowTwos[keys[e]] || keyGetByValue.length > 0) {
+        if (keyGetByValue.length > 0) {
           preKey = keyGetByValue;
         } else {
-          preKey =  [keyFlowTwos[keys[e]]];
+          preKey = [keyFlowTwos[keys[e]]];
         }
       }
     }
-  } else {
-    // Flow 1: Similar Word Joke
-    const words = wordcut.cut(msg).split("|");
-    if (words.length === 0) {
-      return;
-    }
-    const keyword = words.sort((a, b) => b.length - a.length)[0];
-    if (keyword.length < 2) {
-      return;
-    }
-    const nearestWords = getNearestWords(keyword, 20);
-    if (nearestWords.length === 0) {
-      return;
-    }
-    const jokeWord = nearestWords[Math.floor(Math.random() * nearestWords.length)];
-    console.log(keyword + " -> " + jokeWord);
-    return new SimilarWordJoke(database.getWordDescriptions(jokeWord), [jokeWord]);
-  }
+}
+
+async function flowThree() {
+  let joke = await randomJoke();
+  console.log(joke);
+  let keyword = wordcut.cut(joke.description).split("|");
+  return new InitialJoke(joke.word, keyword, joke.answer);
 }
 
 function getKeyByValue(value) {
@@ -108,7 +122,7 @@ function getKeyByValue(value) {
     arr.push(result);
     keyFlowTwosAfterFindKey[result] = null;
   }
-  console.log("key get by val"+arr)
+  console.log("key get by val" + arr)
   return arr;
 }
 
@@ -120,7 +134,7 @@ function setFlowKey() {
 function getAllkeysInMessage(msg) {
   let getAllkeysInMessage = [];
   for (let e in allFlowTwoKeys) {
-    if (msg.includes(allFlowTwoKeys[e])&& !getAllkeysInMessage.includes(msg)) {
+    if (msg.includes(allFlowTwoKeys[e]) && !getAllkeysInMessage.includes(msg)) {
       getAllkeysInMessage.push(allFlowTwoKeys[e]);
     }
   }

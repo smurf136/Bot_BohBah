@@ -28,7 +28,7 @@ async function handleMessage(msg) {
 }
 
 function isAddJoke(msg){
-  return msg.content.includes('-');
+    return msg.content.includes('-');
 }
 
 module.exports = { handleMessage };
