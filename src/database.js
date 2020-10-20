@@ -13,7 +13,7 @@ const words = {
   'กาแฟ': ['เอาไว้กินแก้ง่วง'],
 }
 
-const flow2Words = {
+let flow2Words = {
   'คนสุดท้ายที่อยู่ในเกม?' : ['คนสุดท้าย','เกม'],
   'หมายถึงชอบเรา?' : ['ชอบ'],
   'ไอจามไม่มีไอจีดีกว่า' : ['ไอ','จาม'],
@@ -54,6 +54,10 @@ function getFlowTwoDescription(key){
   return flow2Words[key];
 }
 
+function addFlowTwo(key,...value){
+  return flow2Words[key] = value;
+}
+
 function getAllWords() {
   return Object.keys(words);
 }
@@ -67,5 +71,6 @@ module.exports = {
   getWordDescriptions,
   getFlowTwoAllKeys,
   getFlowTwoAnswer,
-  getFlowTwoDescription
+  getFlowTwoDescription,
+  addFlowTwo
 };
