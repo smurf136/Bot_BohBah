@@ -10,7 +10,6 @@ const addJokeFormat = /^-a normalJoke [a-zA-Z]+ [a-zA-Z]+ [a-zA-Z]+/;
 
 function addJoke(msg) {
   if(addJokeFormat.test(msg)){
-    console.log(msg)
     return addNormal(msg)
   }
   return addDialogJoke(msg);
@@ -29,7 +28,6 @@ function addDialogJoke(msg){
     }
     let key = dialogJoke.shift();
     let a = database.addFlowTwo(key,...dialogJoke);
-    console.log(database.getFlowTwoAllKeys())
     // console.log(dialogJoke);
     return 'Succeed';
   }
