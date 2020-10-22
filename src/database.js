@@ -34,7 +34,7 @@ let flow2Words = {
 
 function getFlowTwoAllKeys(){
   let data = {}
-  let key = {} 
+  let key = {}
   let all = []
   let allKeys = Object.keys(flow2Words)
   for(let e in allKeys){
