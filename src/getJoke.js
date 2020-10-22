@@ -4,6 +4,7 @@ const db = fb.database().ref("/");
 
 function addNormalJoke(answer,description,word) {
   // Add a new document in collection "cities"
+  console.log("normal")
   db.push({
     answer : answer,
     description: description,

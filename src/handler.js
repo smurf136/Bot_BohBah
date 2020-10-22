@@ -4,12 +4,15 @@ const { addJoke } = require("./add-joke");
 
 let currentJokes = {};
 
+const addJokeKey = /^-a (normalJoke|dialogJoke|keyJoke)$/;
+
 /**
  * Handle Discord message
  * @param {Message} msg
  */
 async function handleMessage(msg) {
   if(isAddJoke(msg)){
+    console.log("pass")
     let replyMessage = addJoke(msg.content);
     msg.reply(replyMessage);
   } else{
@@ -28,7 +31,9 @@ async function handleMessage(msg) {
 }
 
 function isAddJoke(msg){
-    return msg.content.includes('-');
+  console.log(msg.content.split(" ").slice(0,2).toString())
+    return addJokeKey.test(msg.content.split(" ").slice(0,2).toString().replace(',',' '))
+          &&msg.content.split(" ").length==5;
 }
 
 module.exports = { handleMessage };
