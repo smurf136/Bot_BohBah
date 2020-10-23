@@ -8,9 +8,9 @@ const { addNormalJoke } = require('./getJoke');
 
 
 function addJoke(msg) {
-  if (msg.includes("normal")) {
+  if (msg.includes("normalJoke")) {
     return addNormal(msg)
-  } else if (msg.includes("dialog")) {
+  } else if (msg.includes("dialogJoke")) {
     return addDialogJoke(msg)
   } else {
     return "key";
@@ -39,11 +39,9 @@ function addNormal(msg) {
   let answer = splitString[2];
   let description = splitString[3];
   let word = splitString[4];
-  console.log("eieiei")
   if(!(answer||description||word)){
     return "plese enter answer, description, word";
   }
-  console.log("elelele")
   addNormalJoke(answer, description, word);
   return "add Success";
 }
