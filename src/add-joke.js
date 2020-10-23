@@ -1,5 +1,6 @@
 const database = require("./database");
 const { addNormalJoke } = require('./getJoke');
+const { help } = require('./help');
 
 /**
  * Add a new joke
@@ -23,15 +24,13 @@ function addDialogJoke(msg){
     let string = newMessage.split(" ");
     for(let i = 0 ; i < string.length ; i++){
       dialogJoke.push(string[i]);
-    }
+    } 
     if(dialogJoke.length < 2 || string.includes('help')){
       return help(msg);
     }
     let key = dialogJoke.shift();
-    let a = database.addFlowTwo(key,...dialogJoke);
-    console.log(database.getFlowTwoAllKeys())
-    // console.log(dialogJoke);
-    return 'Succeed';
+    database.addFlowTwo(key,...dialogJoke);
+    return 'Add dialog joke successful.';
   }
   return help(msg);
 }
@@ -42,13 +41,7 @@ function addNormal(msg){
     let description = splitString[3];
     let word = splitString[4];
     addNormalJoke(answer,description,word);
-    return "add Success";
+    return "Add normal joke successful.";
 }
 
-function help(msg){
-  if(msg.includes('-adj')){
-    return 'Use: -adj [answer] [keyword] [..keyword] to create new joke.';
-  }
-  return 'You just type something wrong, try again.'
-}
 module.exports = { addJoke };
